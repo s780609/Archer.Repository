@@ -37,11 +37,6 @@ namespace Uitc.Repository
             _connectionName = connectionName;
         }
 
-        private SqlConnection CreateDbConnection()
-        {
-            return new SqlConnection(_connectionString);
-        }
-
         /// <summary>
         /// Execute
         /// </summary>

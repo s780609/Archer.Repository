@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34701.34
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Uitc.Repository", "Uitc.Repository\Uitc.Repository.csproj", "{F36A14CE-FB4F-41BF-9C21-A9CEC3F5A0AF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Archer.Repository", "Archer.Repository\Archer.Repository.csproj", "{F36A14CE-FB4F-41BF-9C21-A9CEC3F5A0AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Uitc.Repository.Testing", "Uitc.Repository.Testing\Uitc.Repository.Testing.csproj", "{F9127784-70EC-4A7A-86EF-78D3EFB90A9A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Archer.Repository.Testing", "Archer.Repository.Testing\Archer.Repository.Testing.csproj", "{F9127784-70EC-4A7A-86EF-78D3EFB90A9A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
