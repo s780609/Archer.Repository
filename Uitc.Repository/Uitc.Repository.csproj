@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Archer.Extension" Version="1.0.9" />
+    <PackageReference Include="Dapper" Version="2.1.35" />
+  </ItemGroup>
+
+</Project>
