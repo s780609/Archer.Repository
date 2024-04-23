@@ -11,7 +11,7 @@ using Archer.Extension;
 using Microsoft.Data.SqlClient;
 using Archer.Extension.SecurityHelper;
 
-namespace Uitc.Repository
+namespace Archer.Repository
 {
     public class Repository
     {

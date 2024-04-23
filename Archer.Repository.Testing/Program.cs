@@ -1,6 +1,6 @@
 ﻿using Archer.Extension.SecurityHelper;
-using Uitc.Repository;
-using Uitc.Repository.Testing;
+using Archer.Repository;
+using Archer.Repository.Testing;
 
 // See https://aka.ms/new-console-template for more information
 Console.WriteLine("Uitc.Repository.Testing Start...");
