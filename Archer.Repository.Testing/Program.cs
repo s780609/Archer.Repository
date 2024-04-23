@@ -1,9 +1,9 @@
 ﻿using Archer.Extension.SecurityHelper;
-using Uitc.Repository;
+using Archer.Repository;
 using Uitc.Repository.Testing;
 
 // See https://aka.ms/new-console-template for more information
-Console.WriteLine("Uitc.Repository.Testing Start...");
+Console.WriteLine("Archer.Repository.Testing Start...");
 
 const string keyConn = "keyConn";
 const string ivConn = "ivConn";
