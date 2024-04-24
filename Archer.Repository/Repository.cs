@@ -13,7 +13,7 @@ using Archer.Extension.SecurityHelper;
 
 namespace Archer.Repository
 {
-    public class Repository
+    public class Repository : IRepository
     {
         private readonly string _connectionName;
         private readonly string _connectionString;
