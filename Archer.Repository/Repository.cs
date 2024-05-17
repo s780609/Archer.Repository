@@ -280,48 +280,7 @@ namespace Archer.Repository
 
         public virtual int Create<Table>(Table model)
         {
-            string[] propsName = model.GetPropsName();
-            string[] propsValue = model.GetPropsValue();
-
-            if (propsName.Length != propsValue.Length)
-            {
-                throw new ArgumentOutOfRangeException(nameof(propsName) + "'s length != " + nameof(propsValue) + "'s length.");
-            }
-
-            string tableName = this.FindTableName<Table>();
-
-            StringBuilder sqlBuilder = new StringBuilder();
-
-            sqlBuilder.Append($" INSERT INTO dbo.{tableName} ( ");
-
-            for (int i = 0; i < propsName.Length; i++)
-            {
-                if (propsValue[i] != null)
-                {
-                    sqlBuilder.Append(propsName[i]);
-                    sqlBuilder.Append(", ");
-                }
-            }
-
-            sqlBuilder.Remove(sqlBuilder.Length - 2, 1);
-
-            sqlBuilder.Append(" ) ");
-            sqlBuilder.Append(" VALUES ( ");
-
-            for (int i = 0; i < propsValue.Length; i++)
-            {
-                if (propsValue[i] != null)
-                {
-                    sqlBuilder.Append("@" + propsName[i]);
-                    sqlBuilder.Append(", ");
-                }
-            }
-
-            sqlBuilder.Remove(sqlBuilder.Length - 2, 1);
-
-            sqlBuilder.Append(" ) ");
-
-            return this.Execute(sqlBuilder.ToString(), model);
+            return this.Create<Table>((object)model);
         }
 
         public virtual int Create<Table>(object model)
@@ -372,42 +331,7 @@ namespace Archer.Repository
 
         public virtual int Update<Table>(Table model, Table key)
         {
-            key.ThrowIfNull(nameof(key));
-            model.ThrowIfNull(nameof(model));
-
-            string[] keyNames = key.GetPropsName();
-            string[] keyValues = key.GetPropsValue();
-
-            string[] modelNames = model.GetPropsName();
-            string[] modelValues = model.GetPropsValue();
-
-            if (modelNames.Length == 0)
-            {
-                throw new Exception($"{nameof(model)} has no any props. It at least need one prop.");
-            }
-
-            string tableName = this.FindTableName<Table>();
-
-            StringBuilder sqlBuilder = new StringBuilder();
-
-            sqlBuilder.Append($" UPDATE dbo.{tableName} ");
-
-            sqlBuilder.Append(" SET ");
-
-            for (int i = 0; i < modelNames.Length; i++)
-            {
-                if (modelValues[i] != null)
-                {
-                    sqlBuilder.Append($" {modelNames[i]} = @{modelNames[i]} ");
-                    sqlBuilder.Append(", ");
-                }
-            }
-
-            sqlBuilder.Remove(sqlBuilder.Length - 2, 1);
-
-            sqlBuilder.Append(this.GenerateWhereSqlScript<Table>(key));
-
-            return this.Execute(sqlBuilder.ToString(), key);
+            return this.Update<Table>((object)model, (object)key);
         }
 
         public virtual int Update<Table>(object model, object key)
@@ -417,6 +341,23 @@ namespace Archer.Repository
 
             string[] modelNames = model.GetPropsName();
             string[] modelValues = model.GetPropsValue();
+            string[] keyNames = key.GetPropsName();
+            string[] keyValues = key.GetPropsValue();
+
+            int checkLoopNum = keyNames.Length < modelNames.Length ? keyNames.Length : modelValues.Length;
+
+            for (int i = 0; i < checkLoopNum; i++)
+            {
+                if (modelNames[i] == keyNames[i])
+                {
+                    if (modelValues[i] == null && keyValues[i] == null)
+                    {
+                        continue;
+                    }
+
+                    throw new ArgumentException("model and key have same props.");
+                }
+            }
 
             if (modelNames.Length == 0)
             {
@@ -449,17 +390,7 @@ namespace Archer.Repository
 
         public virtual int Delete<Table>(Table model)
         {
-            model.ThrowIfNull(nameof(model));
-
-            string tableName = this.FindTableName<Table>();
-
-            StringBuilder sqlBuilder = new StringBuilder();
-
-            sqlBuilder.Append($" DELETE dbo.{tableName} ");
-
-            sqlBuilder.Append(this.GenerateWhereSqlScript<Table>(model));
-
-            return this.Execute(sqlBuilder.ToString(), model);
+            return this.Delete<Table>((object)model);
         }
 
         public virtual int Delete<Table>(object model)
@@ -480,17 +411,25 @@ namespace Archer.Repository
         public object MergeObjects(params object[] objects)
         {
             var dict = new Dictionary<string, object>();
+
             foreach (var obj in objects)
             {
                 var props = obj.GetType().GetProperties();
+
                 foreach (var prop in props)
                 {
-                    dict[prop.Name] = prop.GetValue(obj);
+                    object value = prop.GetValue(obj);
+
+                    if (value != null)
+                    {
+                        dict[prop.Name] = value;
+                    }
                 }
             }
 
             var mergedObj = new ExpandoObject();
             var mergedObjDict = (IDictionary<string, object>)mergedObj;
+
             foreach (var kvp in dict)
             {
                 mergedObjDict[kvp.Key] = kvp.Value;
