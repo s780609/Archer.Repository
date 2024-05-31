@@ -297,13 +297,13 @@ namespace Archer.Repository
 
             StringBuilder sqlBuilder = new StringBuilder();
 
-            sqlBuilder.Append($" INSERT INTO dbo.{tableName} ( ");
+            sqlBuilder.Append($" INSERT INTO [dbo].[{tableName}] ( ");
 
             for (int i = 0; i < propsName.Length; i++)
             {
                 if (propsValue[i] != null)
                 {
-                    sqlBuilder.Append(propsName[i]);
+                    sqlBuilder.Append($"[{propsName[i]}]");
                     sqlBuilder.Append(", ");
                 }
             }
@@ -331,7 +331,7 @@ namespace Archer.Repository
 
         public virtual int Update<Table>(Table model, Table key)
         {
-            return this.Update<Table>((object)model, (object)key);
+            return this.Update<Table>(model, key);
         }
 
         public virtual int Update<Table>(object model, object key)
@@ -368,7 +368,7 @@ namespace Archer.Repository
 
             StringBuilder sqlBuilder = new StringBuilder();
 
-            sqlBuilder.Append($" UPDATE dbo.{tableName} ");
+            sqlBuilder.Append($" UPDATE [dbo].[{tableName}] ");
 
             sqlBuilder.Append(" SET ");
 
@@ -376,7 +376,7 @@ namespace Archer.Repository
             {
                 if (modelValues[i] != null)
                 {
-                    sqlBuilder.Append($" {modelNames[i]} = @{modelNames[i]} ");
+                    sqlBuilder.Append($" [{modelNames[i]}] = @{modelNames[i]} ");
                     sqlBuilder.Append(", ");
                 }
             }
