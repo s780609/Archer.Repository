@@ -1,4 +1,4 @@
-﻿namespace Uitc.Repository.Testing
+﻿namespace Archer.Repository.Testing
 {
     public class GroupCodes
     {
