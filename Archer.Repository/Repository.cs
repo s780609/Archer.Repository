@@ -346,19 +346,6 @@ namespace Archer.Repository
 
             int checkLoopNum = keyNames.Length < modelNames.Length ? keyNames.Length : modelValues.Length;
 
-            for (int i = 0; i < checkLoopNum; i++)
-            {
-                if (modelNames[i] == keyNames[i])
-                {
-                    if (modelValues[i] == null && keyValues[i] == null)
-                    {
-                        continue;
-                    }
-
-                    throw new ArgumentException("model and key have same props.");
-                }
-            }
-
             if (modelNames.Length == 0)
             {
                 throw new Exception($"{nameof(model)} has no any props. It at least need one prop.");
