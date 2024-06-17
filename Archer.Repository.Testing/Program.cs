@@ -64,4 +64,9 @@ repository.Delete<Users>(new
     Account = "t1123456",
 });
 
+Loan loan = new Loan();
+loan.IsExceedRelativeLimit = true;
+
+int rows = repository.Update(loan, new Loan { LoanID = "123" });
+
 Console.ReadLine();

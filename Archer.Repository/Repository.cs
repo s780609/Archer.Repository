@@ -331,7 +331,7 @@ namespace Archer.Repository
 
         public virtual int Update<Table>(Table model, Table key)
         {
-            return this.Update<Table>(model, key);
+            return this.Update<Table>((object)model, (object)key);
         }
 
         public virtual int Update<Table>(object model, object key)
