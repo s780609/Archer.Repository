@@ -4,7 +4,7 @@ using Archer.Repository.Testing;
 using Microsoft.Extensions.Configuration;
 using System.Text;
 
-Console.WriteLine("Uitc.Repository.Testing Start...");
+Console.WriteLine("Repository.Testing Start...");
 
 string environmentName = Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT") ?? "Production";
 
