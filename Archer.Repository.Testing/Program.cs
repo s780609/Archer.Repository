@@ -64,4 +64,8 @@ repository.Delete<Users>(new
     Account = "t1123456",
 });
 
+repository.Update(
+         new Loan { ChangeReason = "TEST" },
+         new Loan { LoanID = "20240620E1217327624003" });
+
 Console.ReadLine();

@@ -245,5 +245,7 @@
         public string ModifySupervisor { get; set; } = null;
 
         public bool? IsApp { get; set; }
+
+        public string? ChangeReason { get; set; }
     }
 }

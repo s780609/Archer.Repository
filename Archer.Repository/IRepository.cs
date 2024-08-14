@@ -45,6 +45,8 @@ namespace Archer.Repository
 
         int Create<Table>(object model);
 
+        void Create<Table>(IEnumerable<Table> modelList);
+
         int Update<Table>(Table model, Table key);
 
         int Update<Table>(object model, object key);
