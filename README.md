@@ -6,7 +6,7 @@
 |  ----  | ----  | ---- | ---- |
 | Execute  | 執行SQL  | Table  | sql, param  |
 | Query  | 查詢  | Table  | sql, param  |
-| QuerySingle  | 單一查詢  | Table  | sql, param  |
+| QuerySingle  | 單一查詢  | Table  | sql, param, options  |
 | Create  | 新增  | Table  | model |
 | Update  | 更新 | Table  | model, key  |
 | Delete  | 刪除  | Table  | model  |
