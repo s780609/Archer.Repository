@@ -49,7 +49,7 @@ namespace Archer.Repository
 
         int Update<Table>(Table model, Table key);
 
-        int Update<Table>(object model, object key);
+        int Update<Table>(object model, object key, List<RepositoryOption> options = null);
 
         int Delete<Table>(Table model);
 

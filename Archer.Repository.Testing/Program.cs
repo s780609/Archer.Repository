@@ -4,7 +4,7 @@ using Archer.Repository.Testing;
 using Microsoft.Extensions.Configuration;
 using System.Text;
 
-Console.WriteLine("Repository.Testing Start...");
+Console.WriteLine("Uitc.Repository.Testing Start...");
 
 string environmentName = Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT") ?? "Production";
 
@@ -64,8 +64,9 @@ repository.Delete<Users>(new
     Account = "t1123456",
 });
 
-repository.Update(
-         new Loan { ChangeReason = "TEST" },
-         new Loan { LoanID = "20240620E1217327624003" });
+Loan loan = new Loan();
+loan.IsExceedRelativeLimit = true;
+
+int rows = repository.Update(loan, new Loan { LoanID = "123" });
 
 Console.ReadLine();

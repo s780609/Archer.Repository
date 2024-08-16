@@ -366,7 +366,7 @@ namespace Archer.Repository
             return this.Update<Table>((object)model, (object)key);
         }
 
-        public virtual int Update<Table>(object model, object key)
+        public virtual int Update<Table>(object model, object key, List<RepositoryOption> options = null)
         {
             key.ThrowIfNull(nameof(key));
             model.ThrowIfNull(nameof(model));
@@ -393,7 +393,7 @@ namespace Archer.Repository
 
             for (int i = 0; i < modelNames.Length; i++)
             {
-                if (modelValues[i] != null)
+                if (modelValues[i] != null || (options != null && options.Contains(RepositoryOption.EnableUpdateNull)))
                 {
                     sqlBuilder.Append($" [{modelNames[i]}] = @{modelNames[i]} ");
                     sqlBuilder.Append(", ");
@@ -404,7 +404,7 @@ namespace Archer.Repository
 
             sqlBuilder.Append(this.GenerateWhereSqlScript(key));
 
-            return this.Execute(sqlBuilder.ToString(), MergeObjects(key, model));
+            return this.Execute(sqlBuilder.ToString(), MergeObjects(new object[] { key, model }, options: options));
         }
 
         public virtual int Delete<Table>(Table model)
@@ -427,7 +427,7 @@ namespace Archer.Repository
             return this.Execute(sqlBuilder.ToString(), model);
         }
 
-        public object MergeObjects(params object[] objects)
+        public object MergeObjects(object[] objects, List<RepositoryOption> options = null)
         {
             var dict = new Dictionary<string, object>();
 
@@ -439,7 +439,7 @@ namespace Archer.Repository
                 {
                     object value = prop.GetValue(obj);
 
-                    if (value != null)
+                    if (value != null || (options != null && options.Contains(RepositoryOption.EnableUpdateNull)))
                     {
                         dict[prop.Name] = value;
                     }
