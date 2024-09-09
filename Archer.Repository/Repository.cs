@@ -43,7 +43,7 @@ namespace Archer.Repository
         /// </summary>
         /// <param name="sql"></param>
         /// <returns></returns>
-        public virtual int Execute(string sql, object param = null)
+        public virtual int Execute(string sql, object param = null, IsolationLevel isolationLevel = IsolationLevel.Serializable)
         {
             IDbConnection conn;
 
@@ -62,7 +62,7 @@ namespace Archer.Repository
 
             conn.Open();
 
-            using (IDbTransaction transaction = conn.BeginTransaction())
+            using (IDbTransaction transaction = conn.BeginTransaction(isolationLevel))
             {
                 try
                 {
@@ -93,7 +93,7 @@ namespace Archer.Repository
         /// <param name="sql"></param>
         /// <param name="param"></param>
         /// <returns></returns>
-        public virtual List<Table> Query<Table>(string sql = "", object param = null)
+        public virtual List<Table> Query<Table>(string sql = "", object param = null, IsolationLevel isolationLevel = IsolationLevel.Serializable)
         {
             IDbConnection conn;
 
@@ -112,7 +112,7 @@ namespace Archer.Repository
 
             conn.Open();
 
-            using (IDbTransaction transaction = conn.BeginTransaction())
+            using (IDbTransaction transaction = conn.BeginTransaction(isolationLevel))
             {
                 if (string.IsNullOrWhiteSpace(sql))
                 {
@@ -148,7 +148,7 @@ namespace Archer.Repository
             }
         }
 
-        public virtual Table QuerySingle<Table>(string sql = "", object param = null)
+        public virtual Table QuerySingle<Table>(string sql = "", object param = null, IsolationLevel isolationLevel = IsolationLevel.Serializable)
         {
             IDbConnection conn;
 
@@ -167,7 +167,7 @@ namespace Archer.Repository
 
             conn.Open();
 
-            using (IDbTransaction transaction = conn.BeginTransaction())
+            using (IDbTransaction transaction = conn.BeginTransaction(isolationLevel))
             {
                 if (string.IsNullOrWhiteSpace(sql))
                 {
@@ -279,12 +279,12 @@ namespace Archer.Repository
             return match.Groups[1].Value;
         }
 
-        public virtual int Create<Table>(Table model)
+        public virtual int Create<Table>(Table model, IsolationLevel isolationLevel = IsolationLevel.Serializable)
         {
-            return this.Create<Table>((object)model);
+            return this.Create<Table>((object)model, isolationLevel);
         }
 
-        public virtual int Create<Table>(object model)
+        public virtual int Create<Table>(object model, IsolationLevel isolationLevel = IsolationLevel.Serializable)
         {
             string[] propsName = model.GetPropsName();
             string[] propsValue = model.GetPropsValue();
@@ -327,7 +327,7 @@ namespace Archer.Repository
 
             sqlBuilder.Append(" ) ");
 
-            return this.Execute(sqlBuilder.ToString(), model);
+            return this.Execute(sqlBuilder.ToString(), model, isolationLevel);
         }
 
         public virtual void Create<Table>(IEnumerable<Table> modelList)
@@ -361,12 +361,12 @@ namespace Archer.Repository
             }
         }
 
-        public virtual int Update<Table>(Table model, Table key)
+        public virtual int Update<Table>(Table model, Table key, List<RepositoryOption> options = null, IsolationLevel isolationLevel = IsolationLevel.Serializable)
         {
-            return this.Update<Table>((object)model, (object)key);
+            return this.Update<Table>((object)model, (object)key, options, isolationLevel);
         }
 
-        public virtual int Update<Table>(object model, object key, List<RepositoryOption> options = null)
+        public virtual int Update<Table>(object model, object key, List<RepositoryOption> options = null, IsolationLevel isolationLevel = IsolationLevel.Serializable)
         {
             key.ThrowIfNull(nameof(key));
             model.ThrowIfNull(nameof(model));
@@ -404,15 +404,15 @@ namespace Archer.Repository
 
             sqlBuilder.Append(this.GenerateWhereSqlScript(key));
 
-            return this.Execute(sqlBuilder.ToString(), MergeObjects(new object[] { key, model }, options: options));
+            return this.Execute(sqlBuilder.ToString(), MergeObjects(new object[] { key, model }, options: options), isolationLevel);
         }
 
-        public virtual int Delete<Table>(Table model)
+        public virtual int Delete<Table>(Table model, IsolationLevel isolationLevel = IsolationLevel.Serializable)
         {
-            return this.Delete<Table>((object)model);
+            return this.Delete<Table>((object)model, isolationLevel);
         }
 
-        public virtual int Delete<Table>(object model)
+        public virtual int Delete<Table>(object model, IsolationLevel isolationLevel = IsolationLevel.Serializable)
         {
             model.ThrowIfNull(nameof(model));
 
@@ -424,7 +424,7 @@ namespace Archer.Repository
 
             sqlBuilder.Append(this.GenerateWhereSqlScript(model));
 
-            return this.Execute(sqlBuilder.ToString(), model);
+            return this.Execute(sqlBuilder.ToString(), model, isolationLevel);
         }
 
         public object MergeObjects(object[] objects, List<RepositoryOption> options = null)
