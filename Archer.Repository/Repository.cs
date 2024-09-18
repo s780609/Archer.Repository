@@ -11,7 +11,6 @@ using Archer.Extension;
 using Microsoft.Data.SqlClient;
 using Archer.Extension.SecurityHelper;
 using System.Reflection;
-using System.Transactions;
 
 namespace Archer.Repository
 {
