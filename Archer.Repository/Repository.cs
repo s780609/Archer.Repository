@@ -348,7 +348,22 @@ namespace Archer.Repository
             string tableName = this.FindTableName<Table>();
             DataTable dataTable = ToDataTable(modelList);
 
-            using (var copy = new SqlBulkCopy(_connectionString))
+            IDbConnection conn;
+
+            if (_databaseHelper != null)
+            {
+                conn = _databaseHelper.CreateConnectionBy(_connectionName);
+            }
+            else if (_securityHelper != null)
+            {
+                conn = new SqlConnection(_securityHelper.DecryptConn(_connectionString));
+            }
+            else
+            {
+                conn = new SqlConnection(_connectionString);
+            }
+
+            using (var copy = new SqlBulkCopy((SqlConnection)conn))
             {
                 copy.DestinationTableName = tableName;
 
