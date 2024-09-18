@@ -11,6 +11,7 @@ using Archer.Extension;
 using Microsoft.Data.SqlClient;
 using Archer.Extension.SecurityHelper;
 using System.Reflection;
+using System.Transactions;
 
 namespace Archer.Repository
 {
@@ -348,16 +349,53 @@ namespace Archer.Repository
             string tableName = this.FindTableName<Table>();
             DataTable dataTable = ToDataTable(modelList);
 
-            using (var copy = new SqlBulkCopy(_connectionString))
+            IDbConnection conn;
+
+            if (_databaseHelper != null)
             {
-                copy.DestinationTableName = tableName;
+                conn = _databaseHelper.CreateConnectionBy(_connectionName);
+            }
+            else if (_securityHelper != null)
+            {
+                conn = new SqlConnection(_securityHelper.DecryptConn(_connectionString));
+            }
+            else
+            {
+                conn = new SqlConnection(_connectionString);
+            }
 
-                foreach (string propName in propsName)
+            conn.Open();
+
+            using (IDbTransaction transaction = conn.BeginTransaction())
+            {
+                try
                 {
-                    copy.ColumnMappings.Add(propName, propName);
-                }
+                    using (var copy = new SqlBulkCopy((SqlConnection)conn))
+                    {
+                        copy.DestinationTableName = tableName;
 
-                copy.WriteToServer(dataTable);
+                        foreach (string propName in propsName)
+                        {
+                            copy.ColumnMappings.Add(propName, propName);
+                        }
+
+                        copy.WriteToServer(dataTable);
+
+                        transaction.Commit();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                    transaction.Rollback();
+
+                    throw;
+                }
+                finally
+                {
+                    conn.Close();
+                    conn.Dispose();
+                }
             }
         }
 
