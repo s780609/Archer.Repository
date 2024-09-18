@@ -4,12 +4,14 @@
 ## API
 |  名稱   | 說明   | 泛型 |  參數 |
 |  ----  | ----  | ---- | ---- |
-| Execute  | 執行SQL  | Table  | sql, param  |
-| Query  | 查詢  | Table  | sql, param  |
-| QuerySingle  | 單一查詢  | Table  | sql, param  |
-| Create  | 新增  | Table  | model |
-| Update  | 更新 | Table  | model, key  |
-| Delete  | 刪除  | Table  | model  |
+| Execute  | 執行SQL  | Table  | sql, param, `Isolation Level`  |
+| Query  | 查詢  | Table  | sql, param, `Isolation Level`  |
+| QuerySingle  | 單一查詢  | Table  | sql, param, options, `Isolation Level`  |
+| Create  | 新增  | Table  | model, `Isolation Level` |
+| Update  | 更新 | Table  | model, key, `Isolation Level`  |
+| Delete  | 刪除  | Table  | model, `Isolation Level`  |
+
+📌 上面方法 `Isolation Level` 預設為 `Serializable`
 
 ## 用法範例
 引入並建立連線
