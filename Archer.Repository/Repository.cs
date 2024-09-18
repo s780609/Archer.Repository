@@ -363,16 +363,38 @@ namespace Archer.Repository
                 conn = new SqlConnection(_connectionString);
             }
 
-            using (var copy = new SqlBulkCopy((SqlConnection)conn))
+            conn.Open();
+
+            using (IDbTransaction transaction = conn.BeginTransaction())
             {
-                copy.DestinationTableName = tableName;
-
-                foreach (string propName in propsName)
+                try
                 {
-                    copy.ColumnMappings.Add(propName, propName);
-                }
+                    using (var copy = new SqlBulkCopy((SqlConnection)conn))
+                    {
+                        copy.DestinationTableName = tableName;
 
-                copy.WriteToServer(dataTable);
+                        foreach (string propName in propsName)
+                        {
+                            copy.ColumnMappings.Add(propName, propName);
+                        }
+
+                        copy.WriteToServer(dataTable);
+
+                        transaction.Commit();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                    transaction.Rollback();
+
+                    throw;
+                }
+                finally
+                {
+                    conn.Close();
+                    conn.Dispose();
+                }
             }
         }
 
