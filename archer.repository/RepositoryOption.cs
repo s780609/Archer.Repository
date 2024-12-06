@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Archer.Repository
+﻿namespace Archer.Repository
 {
     public enum RepositoryOption
     {

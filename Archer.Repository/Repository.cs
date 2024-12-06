@@ -43,7 +43,7 @@ namespace Archer.Repository
         /// </summary>
         /// <param name="sql"></param>
         /// <returns></returns>
-        public virtual int Execute(string sql, object param = null, IsolationLevel isolationLevel = IsolationLevel.Serializable)
+        public virtual int Execute(string sql, object param = null, IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
         {
             IDbConnection conn;
 
@@ -93,7 +93,7 @@ namespace Archer.Repository
         /// <param name="sql"></param>
         /// <param name="param"></param>
         /// <returns></returns>
-        public virtual List<Table> Query<Table>(string sql = "", object param = null, IsolationLevel isolationLevel = IsolationLevel.Serializable)
+        public virtual List<Table> Query<Table>(string sql = "", object param = null, IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
         {
             IDbConnection conn;
 
@@ -148,7 +148,7 @@ namespace Archer.Repository
             }
         }
 
-        public virtual Table QuerySingle<Table>(string sql = "", object param = null, IsolationLevel isolationLevel = IsolationLevel.Serializable)
+        public virtual Table QuerySingle<Table>(string sql = "", object param = null, IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
         {
             IDbConnection conn;
 
@@ -279,12 +279,12 @@ namespace Archer.Repository
             return match.Groups[1].Value;
         }
 
-        public virtual int Create<Table>(Table model, IsolationLevel isolationLevel = IsolationLevel.Serializable)
+        public virtual int Create<Table>(Table model, IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
         {
             return this.Create<Table>((object)model, isolationLevel);
         }
 
-        public virtual int Create<Table>(object model, IsolationLevel isolationLevel = IsolationLevel.Serializable)
+        public virtual int Create<Table>(object model, IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
         {
             string[] propsName = model.GetPropsName();
             string[] propsValue = model.GetPropsValue();
@@ -398,12 +398,12 @@ namespace Archer.Repository
             }
         }
 
-        public virtual int Update<Table>(Table model, Table key, List<RepositoryOption> options = null, IsolationLevel isolationLevel = IsolationLevel.Serializable)
+        public virtual int Update<Table>(Table model, Table key, List<RepositoryOption> options = null, IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
         {
             return this.Update<Table>((object)model, (object)key, options, isolationLevel);
         }
 
-        public virtual int Update<Table>(object model, object key, List<RepositoryOption> options = null, IsolationLevel isolationLevel = IsolationLevel.Serializable)
+        public virtual int Update<Table>(object model, object key, List<RepositoryOption> options = null, IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
         {
             key.ThrowIfNull(nameof(key));
             model.ThrowIfNull(nameof(model));
@@ -444,12 +444,12 @@ namespace Archer.Repository
             return this.Execute(sqlBuilder.ToString(), MergeObjects(new object[] { key, model }, options: options), isolationLevel);
         }
 
-        public virtual int Delete<Table>(Table model, IsolationLevel isolationLevel = IsolationLevel.Serializable)
+        public virtual int Delete<Table>(Table model, IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
         {
             return this.Delete<Table>((object)model, isolationLevel);
         }
 
-        public virtual int Delete<Table>(object model, IsolationLevel isolationLevel = IsolationLevel.Serializable)
+        public virtual int Delete<Table>(object model, IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
         {
             model.ThrowIfNull(nameof(model));
 
