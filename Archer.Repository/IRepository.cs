@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.Data.SqlClient;
+using System.Collections.Generic;
 using System.Data;
 
 namespace Archer.Repository
@@ -46,7 +47,7 @@ namespace Archer.Repository
 
         int Create<Table>(object model, IsolationLevel isolationLevel = IsolationLevel.Serializable);
 
-        void Create<Table>(IEnumerable<Table> modelList);
+        void Create<Table>(IEnumerable<Table> modelList, SqlBulkCopyOptions sqlBulkCopyOptions = SqlBulkCopyOptions.KeepIdentity);
 
         int Update<Table>(Table model, Table key, List<RepositoryOption> options = null, IsolationLevel isolationLevel = IsolationLevel.Serializable);
 
