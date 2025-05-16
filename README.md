@@ -11,11 +11,7 @@
 | Update  | 更新 | Table  | model, key, `Isolation Level`  |
 | Delete  | 刪除  | Table  | model, `Isolation Level`  |
 
-<<<<<<< HEAD
 📌 上面方法 `Isolation Level` 預設為 `ReadCommitted`
-=======
-📌 上面方法 `Isolation Level` 預設為 `Serializable`
->>>>>>> 2234132045fbb7dd13a8bc3487fbe53141d0df45
 
 ## 用法範例
 引入並建立連線
