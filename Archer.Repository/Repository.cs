@@ -330,7 +330,7 @@ namespace Archer.Repository
             return this.Execute(sqlBuilder.ToString(), model, isolationLevel);
         }
 
-        public virtual void Create<Table>(IEnumerable<Table> modelList)
+        public virtual void Create<Table>(IEnumerable<Table> modelList, SqlBulkCopyOptions sqlBulkCopyOptions = SqlBulkCopyOptions.KeepIdentity)
         {
             if (modelList.Count() == 0)
             {
@@ -348,13 +348,9 @@ namespace Archer.Repository
             string tableName = this.FindTableName<Table>();
             DataTable dataTable = ToDataTable(modelList);
 
-            IDbConnection conn;
+            SqlConnection conn;
 
-            if (_databaseHelper != null)
-            {
-                conn = _databaseHelper.CreateConnectionBy(_connectionName);
-            }
-            else if (_securityHelper != null)
+            if (_securityHelper != null)
             {
                 conn = new SqlConnection(_securityHelper.DecryptConn(_connectionString));
             }
@@ -365,20 +361,20 @@ namespace Archer.Repository
 
             conn.Open();
 
-            using (IDbTransaction transaction = conn.BeginTransaction())
+            using (SqlTransaction transaction = conn.BeginTransaction())
             {
                 try
                 {
-                    using (var copy = new SqlBulkCopy((SqlConnection)conn))
+                    using (var bulkCopy = new SqlBulkCopy(conn, sqlBulkCopyOptions, transaction))
                     {
-                        copy.DestinationTableName = tableName;
+                        bulkCopy.DestinationTableName = tableName;
 
                         foreach (string propName in propsName)
                         {
-                            copy.ColumnMappings.Add(propName, propName);
+                            bulkCopy.ColumnMappings.Add(propName, propName);
                         }
 
-                        copy.WriteToServer(dataTable);
+                        bulkCopy.WriteToServer(dataTable);
 
                         transaction.Commit();
                     }
